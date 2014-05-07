@@ -1,7 +1,5 @@
 $(document).ready(function() {
 
-    var URL = "http://tiy-fee-rest.herokuapp.com/collections/amber";
-
 var newItem =_.template($('#toodleTemplate').html(), formArr);
 
 $('.putItHere').append(newItem);
@@ -18,6 +16,9 @@ var listdonewobject = {
 formArr.push(listdonewobject);
         console.log(formArr);
 
+        //POST to URL from Allo Allo'
+
+var URL = "http://tiy-fee-rest.herokuapp.com/collections/amber";
          $.post(URL,listdonewobject);
 
 
@@ -25,6 +26,7 @@ var newItem =_.template($('#toodleTemplate').html(), formArr);
 $('.putItHere').html(newItem);
 
 });
+        //GET to Allo Allo' Array Replace from URL 
 
        $.ajax({
                url: 'http://tiy-fee-rest.herokuapp.com/collections/amber/',
@@ -34,7 +36,7 @@ $('.putItHere').html(newItem);
                     alert(FAIL);
                     },
                 success:function(data){
-                    alert(data);
+                    // alert(data);
 
                               var listing = data;
                               var html = '';
@@ -45,7 +47,8 @@ $('.putItHere').html(newItem);
                                 var stuff = obj.stuff;
                                 var id    = obj._id;
                               
-                                html += '<div data-id=\"' + id + '\"> '+stuff+'</div>\n';
+                                html += '<div class="delete btn glyphicon glyphicon-remove" name="item" id="test" data-id=\"' + id + '\"> '+stuff+'</div>\n';
+                                
                                 // html += '<div> "'+id+'"</div>\n';
 
                             } // end for{} loop
@@ -53,14 +56,51 @@ $('.putItHere').html(newItem);
                             $(".putItHere").html(html);
                             console.log();
                     }
-                })
-});
+                });                
 
-    $('li').click(function() {
-    $(this).toggleClass('stroked');
-    $(this).find('span').toggleClass('glyphicon glyphicon-pushpin')
+        //Updating Data on Allo Allo' and/or URL 
+
+            // Database.prototype.update = function ( stuff, id ) {
+            //         if (this.data.indexOf(stuff) !== -1) {
+            //           this.destroyIndex(stuff); // First destroy existing index for object
+            //           obj[this.conf.uniqueKey] = stuff;
+            //           this.conf.driver.setItem(stuff, id); // Override object
+            //           this.buildIndex(id); // Rebuild index
+            //           return id;
+            //         }
+            //       };
+
+
+        // Deleting Data on Allo' Allo and URL
+
+
+        $(".delete").click(function(e) {
+          e.preventDefault();
+
+               $.ajax({
+                   url: 'http://tiy-fee-rest.herokuapp.com/collections/amber/' + '_id',
+                   type: 'DELETE',
+                   data: 'data',
+                   error: function(data){
+                    alert('U FAIL');
+                   },
+                   success: function(data) {
+                    alert('YA SUCCESS!')
+
+                    // $(".deletedHere")html(html);
+                   } 
+               }) //end ajax
+
+         
 
     });
+});
+
+    // $('li').click(function() {
+    // $(this).toggleClass('stroked');
+    // $(this).find('span').toggleClass('glyphicon glyphicon-pushpin')
+
+    // });
 
               
 
