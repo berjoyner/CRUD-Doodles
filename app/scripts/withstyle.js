@@ -19,6 +19,7 @@ var myTodoodles = {
 
   initEvents: function() {
     $("form").on("submit", this.inputTodoodles);
+    $(".putItHere").on("click",".removeDoodle", this.removeTodoodles);
   },
 
 /////POST request to URL from DOM
@@ -73,9 +74,9 @@ var myTodoodles = {
 
                                 var item = obj.item;
                                 var id    = obj._id;
-                              
-                                html += '<div class="delete btn glyphicon glyphicon-remove" name="item" id="test" data-id=\"' + id + '\"> '+item+'</div>\n';
                                 
+                                html += '<li data-postId=' + listing[i]._id + '>' + listing[i].item + '<button class ="glyphicon glyphicon-cog addDoodle" id="addDoodle"></button><button class="glyphicon glyphicon-trash removeDoodle" id="removeDoodle"></button></li>';
+                                 
                                 // html += '<div> "'+id+'"</div>\n';
 
                             }; // end for{} loop
@@ -87,21 +88,56 @@ var myTodoodles = {
 
   },
 
-  removeTodoodles: function() {
+  /////DELETE on click from DOM & URL 
 
-        $.ajax({
-              url: 'http://tiy-fee-rest.herokuapp.com/collections/amber/536a887575fbec02000002e4',
-                   type: 'DELETE',
-                   data: 'data',
-                   dataType:'JSON',
-                   error: function(data){
-                    alert('U FAIL');
-                   },
-                   success: function(data) {
-                    alert('YA SUCCESS!')
-                   } 
-               }) //end ajax
+removeTodoodles: function(e) {
+  e.preventDefault();
 
-  }
+    var $thisDoodle = $(this).closest("li");
+    var postId = $thisDoodle.data("postid");
+    
+    $.ajax({
+    type: "DELETE",
+    url: "http://tiy-fee-rest.herokuapp.com/collections/amber/" + postId,
+    error: function(jqXHR, status, error) {
+        alert("YOU FAIL!");
+    }, 
+    success: function(data) {
+        alert("YAYYYYY");
+        myTodoodles.renderPostTodooles(data);  
+
+      }
+    });
+}
+
+  // removeTodoodles: function() {
+
+  //   var $thisPost = $(this).closest("li")
+  //   var postId = $thisPost.data("postid");
+  //   $.ajax({
+  //     url: "http://tiy-fee-rest.herokuapp.com/collections/amber" + postId,
+  //     type: "DELETE",
+  //     error: function(jqXHR, status, error) {
+  //       alert("couldnt delete");
+  //     }, 
+  //     success: function(data) {
+  //        myTodoodles.renderPostTodooles();  
+  //     }
+  //   });
+  // },
+
+
+  //       $.ajax({
+  //             url: "http://tiy-fee-rest.herokuapp.com/collections/amber/536a897c75fbec02000002eb",
+  //                  type: 'DELETE',
+  //                  error: function(jqXHR, status, error){
+  //                   alert('U FAIL');
+  //                  },
+  //                  success: function(data) {
+  //                   alert('YA SUCCESS!');
+  //                  } 
+  //              }) //end ajax
+
+  // }
 };
 
